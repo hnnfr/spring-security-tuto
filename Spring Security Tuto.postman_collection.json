@@ -1,0 +1,110 @@
+{
+	"info": {
+		"_postman_id": "7ab2c10c-e7fc-46a7-9876-73e7e7dc113a",
+		"name": "Spring Security Tuto",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get User by Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/users/1"
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/users"
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/users"
+				},
+				"body": {
+					 "email": "user3@example.com",
+					 "pwd": "12345",
+					 "role": "USER",
+					 "topics": [],
+					 "opinions": []
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Topics",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/topics"
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Topic",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": ""
+				}, 
+				"body": {
+					 "name": "Agile Manifesto",
+					 "user": {
+							 "email": "user3@example.com"
+						},
+					 "opinions": []
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Topic by Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/topics/2"
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Opinion",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/topics/5/opinions"
+				}, 
+				"body": {
+					 "user": {
+						  "email": "userA@example.com"
+					 },
+					 "topic": {
+						  "name": "Agile Manifesto"
+					 },
+					 "details": "A good reference for every developers",
+					 "scope": "PUBLIC"
+				}
+			},
+			"response": []
+		}
+	]
+}
