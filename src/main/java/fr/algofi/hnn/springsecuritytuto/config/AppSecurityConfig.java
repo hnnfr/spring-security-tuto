@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.password.CompromisedPasswordChecker;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,6 +19,11 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 public class AppSecurityConfig {
     @Bean
+    WebSecurityCustomizer webSecurityCustomizer() {
+        return webSecurity -> webSecurity.ignoring().requestMatchers("/h2-console/**");
+    }
+
+    @Bean
     SecurityFilterChain customSecurityFilterChain(HttpSecurity http) throws Exception {
 //        http.authorizeHttpRequests((requests) -> requests.anyRequest().permitAll());
         http.authorizeHttpRequests((requests) ->
@@ -31,7 +37,7 @@ public class AppSecurityConfig {
 
     @Bean
     UserDetailsService userDetailsService() {
-        UserDetails userA = User.withUsername("userA").password("{noop}12345").roles("USER").build();
+        UserDetails userA = User.withUsername("userA").password("{noop}hong123nam!").roles("USER").build();
         UserDetails userB = User.withUsername("userB").password("{bcrypt}$2a$12$iGmU8r5w1vtEfyw/6N1jteVtXa454n.HvFbhCG94vphJ6mkRA0NFW").roles("USER").build();
         UserDetails admin = User.withUsername("superuser").password("{bcrypt}$2a$12$DX9uKAZgWIsFM/kj7romVO2EZVuPRzRnjXXJz3UAwYEpb.GAi5IJ2").roles("ADMIN").build();
 
