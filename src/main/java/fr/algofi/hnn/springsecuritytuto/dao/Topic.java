@@ -20,7 +20,7 @@ public class Topic {
     private String name;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private User user;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "topic")

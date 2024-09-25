@@ -33,10 +33,12 @@ public class AppSecurityConfig {
 
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((requests) ->
-                requests.requestMatchers("/users", "/users/{userId}").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/topics").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/topics/{topicId}/opinions").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/topics", "/topics/{topicId}", "/error").permitAll());
+                        requests.requestMatchers(HttpMethod.POST, "/users").hasAuthority("WRITE_USER")
+                                .requestMatchers(HttpMethod.GET, "/users", "/users/{userId}").hasAnyAuthority("READ_USER", "WRITE_USER")
+                                .requestMatchers(HttpMethod.POST, "/topics/{topicId}/opinions").hasAuthority("WRITE_OPINION")
+                                .requestMatchers(HttpMethod.POST, "/topics").hasAuthority("WRITE_TOPIC")
+                                .requestMatchers(HttpMethod.GET, "/topics", "/topics/{topicId}").hasAnyAuthority("READ_TOPIC", "WRITE_TOPIC")
+                                .requestMatchers(HttpMethod.GET, "/error").permitAll());
         http.formLogin(withDefaults());
 //        http.formLogin(AbstractHttpConfigurer::disable);
 //        http.httpBasic(withDefaults());
