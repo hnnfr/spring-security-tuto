@@ -2,6 +2,7 @@ package fr.algofi.hnn.springsecuritytuto.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.password.CompromisedPasswordChecker;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -24,13 +25,22 @@ public class AppSecurityConfig {
     @Bean
     SecurityFilterChain customSecurityFilterChain(HttpSecurity http) throws Exception {
 //        http.authorizeHttpRequests((requests) -> requests.anyRequest().permitAll());
+
+        // accepting only HTTPS
+//        http.requiresChannel(rm -> rm.anyRequest().requiresSecure());
+
+//        http.sessionManagement(smc -> smc.invalidSessionUrl("/invalidsession").maximumSessions(1).maxSessionsPreventsLogin(true));
+
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((requests) ->
                 requests.requestMatchers("/users", "/users/{userId}").authenticated()
-                        .requestMatchers("/topics", "/topics/{topicId}", "/error").permitAll());
+                        .requestMatchers(HttpMethod.POST, "/topics").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/topics/{topicId}/opinions").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/topics", "/topics/{topicId}", "/error").permitAll());
         http.formLogin(withDefaults());
 //        http.formLogin(AbstractHttpConfigurer::disable);
-        http.httpBasic(withDefaults());
+//        http.httpBasic(withDefaults());
+        http.httpBasic(hbc -> hbc.authenticationEntryPoint(new CustomeBasicAuthenticationEntryPoint()));
         return http.build();
     }
 
