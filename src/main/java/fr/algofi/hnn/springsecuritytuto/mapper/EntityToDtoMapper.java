@@ -12,6 +12,7 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface EntityToDtoMapper {
 
+//    @Mapping(target = "pwd", ignore = true)
     UserDto userToUserDto(User user, @Context CycleAvoidingMappingContext context);
 
     TopicDto topicToTopicDto(Topic topic, @Context CycleAvoidingMappingContext context);
