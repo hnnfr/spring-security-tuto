@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.password.CompromisedPasswordChecker;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -16,6 +17,7 @@ import org.springframework.security.web.authentication.password.HaveIBeenPwnedRe
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
+@EnableMethodSecurity
 public class AppSecurityConfig {
 
     @Bean
@@ -36,7 +38,7 @@ public class AppSecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/users", "/users/{userId}").hasAnyAuthority("READ_USER", "WRITE_USER")
                                 .requestMatchers(HttpMethod.POST, "/topics/{topicId}/opinions").hasAuthority("WRITE_OPINION")
                                 .requestMatchers(HttpMethod.POST, "/topics").hasAuthority("WRITE_TOPIC")
-                                .requestMatchers(HttpMethod.GET, "/topics", "/topics/{topicId}").hasAnyAuthority("READ_TOPIC", "WRITE_TOPIC")
+                                .requestMatchers(HttpMethod.GET, "/topics", "/topics/{topicId}").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/error").permitAll());
         http.formLogin(withDefaults());
         http.httpBasic(hbc -> hbc.authenticationEntryPoint(new CustomeBasicAuthenticationEntryPoint()));

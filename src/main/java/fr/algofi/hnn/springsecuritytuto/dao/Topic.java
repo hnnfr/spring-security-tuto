@@ -19,6 +19,7 @@ public class Topic {
 
     private String name;
 
+    private String scope;
 
     @ManyToOne
     private User user;

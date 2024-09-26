@@ -10,6 +10,7 @@ create table TOPIC(
     ID int not null AUTO_INCREMENT,
     USER_ID int,
     NAME varchar(1000) not null unique,
+    SCOPE VARCHAR(15) not null,
     PRIMARY KEY ( ID ),
     foreign key (USER_ID) references USERS(ID)
 );
