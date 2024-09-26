@@ -9,10 +9,16 @@ import java.util.List;
 @Data
 public class TopicDto {
     private String name;
+    private String scope;
 
     @JsonBackReference(value = "user-topics")
     private UserDto user;
 
     @JsonManagedReference(value = "topic-opinions")
     private List<OpinionDto> opinions;
+
+    @Override
+    public String toString() {
+        return "TopicDto [name=" + name + ", scope=" + scope + ", user=" + user.getEmail() + ", opinions=" + opinions + "]";
+    }
 }
