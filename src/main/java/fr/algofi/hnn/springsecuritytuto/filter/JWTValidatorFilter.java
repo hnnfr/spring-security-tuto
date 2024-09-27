@@ -18,6 +18,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import javax.crypto.SecretKey;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.security.Principal;
 
 public class JWTValidatorFilter extends OncePerRequestFilter {
     @Override
@@ -31,7 +32,8 @@ public class JWTValidatorFilter extends OncePerRequestFilter {
                 Claims claims = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload();
                 String username = claims.get("username", String.class);
                 String authorities = claims.get("authorities", String.class);
-                Authentication authentication = new UsernamePasswordAuthenticationToken(username, null,
+                Principal principal = new SimplePrincipal(username);
+                Authentication authentication = new UsernamePasswordAuthenticationToken(principal, null,
                         AuthorityUtils.commaSeparatedStringToAuthorityList(authorities));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } catch (Exception e) {
@@ -44,7 +46,7 @@ public class JWTValidatorFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String jwt = request.getHeader(AppConstant.AUTHORIZATION_HEADER);
-        if (jwt == null || (jwt != null && jwt.contains("Basic"))) {
+        if (jwt == null || jwt.contains("Basic")) {
             return true;
         }
         return super.shouldNotFilter(request);
