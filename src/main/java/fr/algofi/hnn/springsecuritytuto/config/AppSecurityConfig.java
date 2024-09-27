@@ -1,5 +1,7 @@
 package fr.algofi.hnn.springsecuritytuto.config;
 
+import fr.algofi.hnn.springsecuritytuto.filter.JWTGeneratorFilter;
+import fr.algofi.hnn.springsecuritytuto.filter.JWTValidatorFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -8,11 +10,13 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
 import org.springframework.security.web.authentication.password.HaveIBeenPwnedRestApiPasswordChecker;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -32,6 +36,9 @@ public class AppSecurityConfig {
 //        http.sessionManagement(smc -> smc.invalidSessionUrl("/invalidsession").maximumSessions(1).maxSessionsPreventsLogin(true));
 
         http.csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(smc -> smc.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(new JWTValidatorFilter(), BasicAuthenticationFilter.class)
+                .addFilterAfter(new JWTGeneratorFilter(), BasicAuthenticationFilter.class)
                 .authorizeHttpRequests((requests) ->
                         requests.requestMatchers(HttpMethod.POST, "/users").access(
                                     new WebExpressionAuthorizationManager("hasAuthority('WRITE_USER') && hasRole('ADMIN')"))
