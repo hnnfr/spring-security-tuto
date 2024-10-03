@@ -33,7 +33,7 @@ public class UserService {
         return result;
     }
 
-    @PostAuthorize("(returnObject.get().email == authentication.principal.username) || hasRole('ADMIN')")
+//    @PostAuthorize("(returnObject.get().email == authentication.principal.username) || hasRole('ADMIN')")
     public Optional<UserDto> getUserById(Long userId) {
         Optional<User> user = userRepository.findById(userId);
         return user.map(value -> toDtoMapper.userToUserDto(value, new CycleAvoidingMappingContext()));
